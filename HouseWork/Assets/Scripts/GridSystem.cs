@@ -13,33 +13,70 @@ public class GridSystem : MonoBehaviour
 
 	private void Awake()
 	{
-		m_GridList = new Grid[m_GridSize.x * m_GridSize.y];
-
-		for(int xIndex = 0; xIndex < m_GridSize.x; xIndex++)
-		{
-			int ID = xIndex;
-
-			Vector3 position = new Vector3(m_SquareSize.x * xIndex, 0.0f, 0.0f);
-
-			m_GridList[ID] = new Grid() { m_ID = ID, m_Position = position };
-		}
+		GenerateGrid(ref m_GridList, m_GridSize, m_SquareSize);
 	}
 
-	private void OnDrawGizmos()
+	/// <summary>
+	/// Generates a grid.
+	/// </summary>
+	/// <param name="grid">Grid.</param>
+	/// <param name="gridSize">Grid size.</param>
+	/// <param name="squareSize">Square size.</param>
+	private void GenerateGrid(ref Grid[] grid, IntVector2 gridSize, IntVector2 squareSize)
 	{
-		for(int yIndex = 0; yIndex < m_GridSize.y; yIndex++)
+		grid = new Grid[gridSize.x * gridSize.y];
+
+		Vector2 gridDimensions = new Vector3(gridSize.x * squareSize.x, gridSize.y * squareSize.y);
+		Vector3 offset = new Vector3((gridDimensions.x * 0.5f) - (squareSize.x * 0.5f), 0.0f, (gridDimensions.y * 0.5f) - (squareSize.y * 0.5f));
+
+		for(int yIndex = 0; yIndex < gridSize.y; yIndex++)
 		{
-			for(int xIndex = 0; xIndex < m_GridSize.x; xIndex++)
+			for(int xIndex = 0; xIndex < gridSize.x; xIndex++)
 			{
-				Vector3 position = new Vector3(m_SquareSize.x * xIndex, 0.0f, m_SquareSize.y * yIndex);
-				Gizmos.DrawWireCube(position, new Vector3(m_SquareSize.x, 0.0f, m_SquareSize.y));
+				int index = xIndex + (yIndex * gridSize.x);
+				IntVector2 ID = new IntVector2(xIndex, yIndex);
+				Vector3 center = new Vector3(squareSize.x * xIndex, 0.0f, squareSize.y * yIndex) - offset;
+				Vector3 size = new Vector3(squareSize.x, 0.0f, squareSize.y);
+
+				grid[index] = new Grid(ID, center, size);
 			}
 		}
 	}
 
+#if UNITY_EDITOR
+
+	private void OnDrawGizmos()
+	{
+		Grid[] grid = null;
+
+		if(m_GridList == null)
+		{
+			GenerateGrid(ref grid, m_GridSize, m_SquareSize);
+		}
+		else
+		{
+			grid = m_GridList;
+		}
+
+		for(int squareIndex = 0; squareIndex < grid.Length; squareIndex++)
+		{
+			Gizmos.DrawWireCube(grid[squareIndex].m_Center, grid[squareIndex].m_Size);
+		}
+	}
+
+#endif
+
 	private struct Grid
 	{
-		public int m_ID;
-		public Vector3 m_Position;
+		public IntVector2 m_ID;
+		public Vector3 m_Center;
+		public Vector3 m_Size;
+
+		public Grid(IntVector2 ID, Vector3 center, Vector3 size)
+		{
+			m_ID = ID;
+			m_Center = center;
+			m_Size = size;
+		}
 	}
 }
