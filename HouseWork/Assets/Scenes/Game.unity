@@ -160,6 +160,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 207563802}
   - 114: {fileID: 207563801}
+  - 114: {fileID: 207563803}
   m_Layer: 0
   m_Name: Level
   m_TagString: Untagged
@@ -197,6 +198,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
+--- !u!114 &207563803
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 207563800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 949d979dcc3d37c4380469f52f686558, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_LevelMap: {fileID: 2800000, guid: 17dfbe79120232e41bd15bf62a8628aa, type: 3}
+  m_PrefabList:
+  - m_Colour:
+      serializedVersion: 2
+      rgba: 4278190080
+    m_Prefab: {fileID: 1000013157846458, guid: cb2bbb24c9c3b38468602e9b05609f8e, type: 2}
 --- !u!1 &535203391
 GameObject:
   m_ObjectHideFlags: 0
